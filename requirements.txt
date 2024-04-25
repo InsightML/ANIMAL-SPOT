@@ -1,0 +1,2 @@
+pip3 install torch torchvision torchaudio
+pip3 install librosa==0.8.0 tensorboardX==2.1 matplotlib==3.3.3 soundfile==0.10.3.post1 scikit-image==0.18.1 six==1.15.0 opencv-python==4.5.1.48 Pillow==8.2.0

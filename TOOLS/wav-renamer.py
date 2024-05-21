@@ -2,10 +2,10 @@ import pandas as pd
 import shutil
 import os
 
-excel_file = "C:\\Users\\JackL\\Downloads\\ANIMAL-SPOT_file-name-structure.xlsx"
-input_wav_folder = "C:\\Users\\JackL\\Downloads\\6. Clown Fish Acoustics-20240417T132045Z-001\\6. Clown Fish Acoustics\\Clown_fish_data"
-output_wav_folder = "output"
-
+excel_file = "/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/ANIMAL-SPOT_file-name-structure.xlsx"
+input_wav_folder = "/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/Clown_fish_data"
+output_wav_folder = "/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/data/clown_fish_data"
+    
 if not os.path.exists(output_wav_folder):
     os.makedirs(output_wav_folder)
 
@@ -22,7 +22,7 @@ def clean_and_concatenate(value, delimiter):
     if isinstance(value, int):
         return f"{value}{delimiter}"
     
-    value = str(value).replace(" ", "").replace("_", "-")
+    value = str(value).replace(" ", "").replace("_", "-").replace(".", "-")
     return f"{value}{delimiter}"
 
 for index, row in df.iterrows():
@@ -41,8 +41,8 @@ for index, row in df.iterrows():
     string = string.rstrip("-_")
     string = f"{string}.wav"
     filename = row['FILENAME']
-    source_file = f"{input_wav_folder}\\{filename}"
-    destination_file = f"{output_wav_folder}\\{string}"
+    source_file = os.path.join(input_wav_folder, filename)
+    destination_file = os.path.join(output_wav_folder, string)
 
     try:
         shutil.copy(source_file, destination_file)

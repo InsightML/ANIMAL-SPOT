@@ -7,7 +7,7 @@
 ################
 ###SRC_DIR = Directory to the ANIMAL-SPOT Source Code Repository
 ################
-src_dir=/*USER-SPECIFIC-DIRECTORY*/
+src_dir=/Users/ferddei/Local/Github/ANIMAL-SPOT/ANIMAL-SPOT
 
 ################
 ###DEBUG = Activate/Deactivate additional logging information during training procedure (recommended). 
@@ -19,7 +19,7 @@ debug=true
 ################
 ###DATA_DIR = Directory to the prepared data material 
 ################
-data_dir=/*USER-SPECIFIC-DIRECTORY*/
+data_dir="/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/data/clown_fish_data"
 
 ################
 ###CACHE_DIR = Directory where cached spectrograms will be stored. During network training, each processed
@@ -27,36 +27,36 @@ data_dir=/*USER-SPECIFIC-DIRECTORY*/
 ###the spectrograms can be directly loaded from this cache direcotry (occupies storage, speed up training). By
 ###default this is "None", and therefore caching is disabled.
 ################
-cache_dir=/*USER-SPECIFIC-DIRECTORY*/
+cache_dir="/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/data/spectograms"
 
 ################
 ###MODEL_DIR = Directory where the final network/model will be stored. 
 ################
-model_dir=/*USER-SPECIFIC-DIRECTORY*/
+model_dir="/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/model"
 
 ################
 ###CHECKPOINT_DIR = Directory where training checkpoints will be stored. Checkpoints are important to load model weights and restart training
 ###from an existing checkpoint, rather than starting from scratch. 
 ################
-checkpoint_dir=/*USER-SPECIFIC-DIRECTORY*/
+checkpoint_dir="/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/model/checkpoints"
 
 ################
 ###LOG_DIR = Directory where the logging file, named TRAIN.log, will be stored.
 ################
-log_dir=/*USER-SPECIFIC-DIRECTORY*/
+log_dir="/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/logs"
 
 ################
 ###SUMMARY_DIR = Directory where all the summary files will be stored. Summary files include all the information about the entire training procedure
 ###(e.g. various machine learning metrics, spectrogram images, and other important figure) which can be loaded to tensorboard (see README - section Network Evaluation). 
 ################
-summary_dir=/*USER-SPECIFIC-DIRECTORY*/
+summary_dir="/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/summary"
 
 ################
 ###NOISE_DIR = Directory where all the .wav excerpts are stored which will be used for noise augmentation during training. If this option is not set,
 ###noise augmentation will not be performed during training. According to the data, it has to be decided whether noise augmentation has a benefit,
 ###and should be activated or not, e.g. original noise-heavy and faint animal vocalization might be eliminated because of noise augmentation. 
 ################
-noise_dir=/*USER-SPECIFIC-DIRECTORY*/
+noise_dir="/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/data/noise"
 
 ################
 ###START_FROM_SCRATCH = Start taining from scratch, i.e. do not use any kind of given checkpoint to restore.
@@ -94,7 +94,7 @@ batch_size=16
 ###However, this is not affecting training speed when using a GPU. Moreover, when using the caching option, the network will significantly speed
 ###up the initial data loading after successfully caching all spectrograms in the first run.
 ################
-num_workers=8
+num_workers=0
 
 ################
 ###NO_CUDA = When this option is deactivated and a GPU is available the model will train GPU-based (much faster!). In case this option is activated
@@ -211,7 +211,7 @@ conv_kernel_size=7
 ###NUM_CLASSES = defines the number of classes. In case of a binary detection scenario this value is equal to 2. In case of a multi-class species/call type classification scenario
 ###this value has to be set according to the existing number of classes
 ################
-num_classes=2
+num_classes=8
 
 ################
 ###MAX_POOL = defines wheter the initial max-pooling within the ResNet architecture is conducted or not. There are three different option: setting the value to 1 activates max

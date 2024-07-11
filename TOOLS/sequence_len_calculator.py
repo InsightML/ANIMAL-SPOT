@@ -21,11 +21,6 @@ def get_audio_length_in_milliseconds(audio_file_path):
     
     return length_in_milliseconds
 
-# Example usage
-audio_file_path = "/Volumes/InsightML/NAS/3_Lucia_Yllan/Clown_Fish_Acoustics/data/training_data/clown_fish_data_binary/call-FirstM-M-NR-R1-Cooperation_B47_2023_20230330-010005-FirstM-B47-M-NR-withlabels_179618_180259.wav"
-audio_length = get_audio_length_in_milliseconds(audio_file_path)
-print(f"Audio length: {audio_length} milliseconds")
-
 # Calculate the average length of all audio files in a directory
 def get_average_audio_length(folder_path):
     """
@@ -72,8 +67,9 @@ def plot_audio_lengths(folder_path):
     plt.legend()
     plt.show()
 
-# Example usage
-folder_path = "/Volumes/InsightML/NAS/3_Lucia_Yllan/Clown_Fish_Acoustics/data/training_data/clown_fish_data_binary"
-average_length, _ = get_average_audio_length(folder_path)
-plot_audio_lengths(folder_path)
-print(f"Average audio length: {average_length} milliseconds")
+if __name__ == "__main__":
+    # Example usage
+    folder_path = "/Volumes/InsightML/NAS/3_Lucia_Yllan/Clown_Fish_Acoustics/data/training_data/clown_fish_data_binary"
+    average_length, _ = get_average_audio_length(folder_path)
+    plot_audio_lengths(folder_path)
+    print(f"Average audio length: {average_length} milliseconds")

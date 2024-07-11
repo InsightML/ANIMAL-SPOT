@@ -19,7 +19,7 @@ debug=true
 ################
 ###DATA_DIR = Directory to the prepared data material 
 ################
-data_dir="/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/data/clown_fish_data"
+data_dir="/Volumes/InsightML/NAS/3_Lucia_Yllan/Clown_Fish_Acoustics/data/training_data/clown_fish_data_binary"
 
 ################
 ###CACHE_DIR = Directory where cached spectrograms will be stored. During network training, each processed
@@ -27,36 +27,36 @@ data_dir="/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@g
 ###the spectrograms can be directly loaded from this cache direcotry (occupies storage, speed up training). By
 ###default this is "None", and therefore caching is disabled.
 ################
-cache_dir="/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/data/spectograms"
+cache_dir="/Volumes/InsightML/NAS/3_Lucia_Yllan/Clown_Fish_Acoustics/data/cache"
 
 ################
 ###MODEL_DIR = Directory where the final network/model will be stored. 
 ################
-model_dir="/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/model"
+model_dir="/Volumes/InsightML/NAS/3_Lucia_Yllan/Clown_Fish_Acoustics/models"
 
 ################
 ###CHECKPOINT_DIR = Directory where training checkpoints will be stored. Checkpoints are important to load model weights and restart training
 ###from an existing checkpoint, rather than starting from scratch. 
 ################
-checkpoint_dir="/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/model/checkpoints"
+checkpoint_dir="/Volumes/InsightML/NAS/3_Lucia_Yllan/Clown_Fish_Acoustics/models/checkpoints"
 
 ################
 ###LOG_DIR = Directory where the logging file, named TRAIN.log, will be stored.
 ################
-log_dir="/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/logs"
+log_dir="/Volumes/InsightML/NAS/3_Lucia_Yllan/Clown_Fish_Acoustics/logs"
 
 ################
 ###SUMMARY_DIR = Directory where all the summary files will be stored. Summary files include all the information about the entire training procedure
 ###(e.g. various machine learning metrics, spectrogram images, and other important figure) which can be loaded to tensorboard (see README - section Network Evaluation). 
 ################
-summary_dir="/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/summary"
+summary_dir="/Volumes/InsightML/NAS/3_Lucia_Yllan/Clown_Fish_Acoustics/docs/summary"
 
 ################
 ###NOISE_DIR = Directory where all the .wav excerpts are stored which will be used for noise augmentation during training. If this option is not set,
 ###noise augmentation will not be performed during training. According to the data, it has to be decided whether noise augmentation has a benefit,
 ###and should be activated or not, e.g. original noise-heavy and faint animal vocalization might be eliminated because of noise augmentation. 
 ################
-noise_dir="/Users/ferddei/Library/CloudStorage/GoogleDrive-fredericjohn.student@gmail.com/My Drive/1. Projects/6. Clown Fish Acoustics/data/noise"
+noise_dir=None
 
 ################
 ###START_FROM_SCRATCH = Start taining from scratch, i.e. do not use any kind of given checkpoint to restore.
@@ -67,7 +67,7 @@ start_from_scratch=true
 ###MAX_TRAIN_EPOCHS = Maximum number of epochs to train the network. By default 500 epochs are set. However, based on previous experience 100 to 150 maximum
 ###training epochs is a good number.
 ################
-max_train_epochs=1
+max_train_epochs=100
 
 ################
 ###JIT_SAVE = After training is finished the network can be saved via two options, either via torch.jit.save or torch.save.
@@ -86,7 +86,7 @@ epochs_per_eval=2
 ###BATCH_SIZE = The amount of spectrograms which will be processed within one batch. Batch size values between 4 and 32 are recommended.
 ###By default a batch size of 16 is used.
 ################
-batch_size=16
+batch_size=32
 
 ################
 ###NUM_WORKERS = The amount of workers while loading the spectral information. This option is only supported in Linux and MacOS due to Windows
@@ -141,7 +141,7 @@ early_stopping_patience_epochs=20
 ###a generated back-up (bck) folder and not considered for model training
 ###Activate (=true) versus Deactivate (=false).
 ################
-filter_broken_audio=true
+filter_broken_audio=false
 
 ################
 ###SEQUENCE_LENGTH = During training a fixed sequence length (amount of time) is used. This is specified via the sequence_length option. All files will be either zero-padded, in case
@@ -149,7 +149,7 @@ filter_broken_audio=true
 ###This value is given in milliseconds. According to the species-specific target signals, this parameter has to be set in a way to represent the average duration length of the
 ###corresponding animal vocalizations. Consequently this parameter is highly animal-specific and needs to be adjusted for each species. By default the value is set to 500ms.
 ################
-sequence_len=500
+sequence_len=660
 
 ################
 ###FREQ_COMPRESSION = In order to reduce memory usage, all input spectrograms are frequency compressed. Therefor a frequency range (fmin-fmax) is mapped onto a give number of
@@ -211,7 +211,7 @@ conv_kernel_size=7
 ###NUM_CLASSES = defines the number of classes. In case of a binary detection scenario this value is equal to 2. In case of a multi-class species/call type classification scenario
 ###this value has to be set according to the existing number of classes
 ################
-num_classes=8
+num_classes=2
 
 ################
 ###MAX_POOL = defines wheter the initial max-pooling within the ResNet architecture is conducted or not. There are three different option: setting the value to 1 activates max
@@ -232,9 +232,9 @@ min_max_norm=true
 ################
 ###FMIN = defines the minimum frequency covered within the spectral network input representation. Every frequency below is ignored within the spectrogram.
 ################
-fmin=500
+fmin=0
 
 ################
 ###FMAX = defines the maximum frequency covered within the spectral network input representation. Every frequency above is ignored within the spectrogram.
 ################
-fmax=10000
+fmax=1000

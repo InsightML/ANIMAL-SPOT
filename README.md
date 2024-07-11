@@ -1,16 +1,31 @@
 # ANIMAL-SPOT enables animal-independent signal detection and classification using deep learning
 
-- [General Description](#general-description)
-- [Reference](#reference)
-- [License](#license)
-- [System Requirements](#system-requirements)
-- [OS-Dependent Installation - TBD](#os-dependent-installation)
-- [Example Data Corpus and Recording](#example-data-corpus-and-recording)
+- [ANIMAL-SPOT enables animal-independent signal detection and classification using deep learning](#animal-spot-enables-animal-independent-signal-detection-and-classification-using-deep-learning)
+- [Installation](#installation)
 - [Data Preparation](#data-preparation)
+  - [General Data and Directory Structure](#general-data-and-directory-structure)
+    - [Data Structure](#data-structure)
+      - [Binary Target/Noise Segmentation](#binary-targetnoise-segmentation)
+      - [Multi-Class Species/Call Type Classification](#multi-class-speciescall-type-classification)
+    - [Directory Structure](#directory-structure)
 - [Network Training](#network-training)
+  - [Linux, MacOS, and Windows](#linux-macos-and-windows)
 - [Network Prediction](#network-prediction)
+  - [Linux, MacOS, and Windows](#linux-macos-and-windows-1)
 - [Network Evaluation](#network-evaluation)
-- [FAQ](#FAQ)
+  - [Linux, MacOS, and Windows](#linux-macos-and-windows-2)
+- [FAQ](#faq)
+
+# Installation
+1. Step 1 - Setup conda env
+   ```python
+    conda create -n animal-spot python=3.9
+    conda activate animal-spot
+    ```
+2. Step 2 - Install dependancies from requirements.txt
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 # General Description
 ANIMAL-SPOT is an animal-independent deep learning software framework that addresses various bioacoustic signal identifcation scenarios, such as: (1) binary target/noise detection, (2) multi-class species identification, and (3) multi-class call type recognition. ANIMAL-SPOT is a ResNet18-based Convolutional Neural Network (CNN), taking inspiration from ORCA-SPOT, a ResNet18-based CNN applied to killer whale sound type versus background noise detection (see https://www.nature.com/articles/s41598-019-47335-w). ANIMAL-SPOT's performance

@@ -74,6 +74,6 @@ def plot_audio_lengths(folder_path):
 
 # Example usage
 folder_path = "/Volumes/InsightML/NAS/3_Lucia_Yllan/Clown_Fish_Acoustics/data/training_data/clown_fish_data_binary"
-average_length = get_average_audio_length(folder_path)
+average_length, _ = get_average_audio_length(folder_path)
 plot_audio_lengths(folder_path)
 print(f"Average audio length: {average_length} milliseconds")

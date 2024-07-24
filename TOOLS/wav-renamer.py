@@ -65,5 +65,5 @@ print(f"Missing files: {missing_wav_files}")
 print(f"Processed files: {processed_file_count}")
 print("Upading log file...")
 with open(log_file, "w") as log:
-    log.write(f"Missing files: {missing_wav_files}")
-    log.write(f"Processed files: {processed_file_count}")
+    log.write(f"Missing files: {missing_wav_files} \n")
+    log.write(f"Processed files: {processed_file_count} \n")

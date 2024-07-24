@@ -101,7 +101,7 @@ num_workers=0
 ###the model will ignore GPU-based training independent of the hardware.
 ###Activate (=true) versus Deactivate (=false).
 ################
-no_cuda=false
+no_cuda=true
 
 ################
 ###LR = Learning rate for updating weights in after each backpropagation step. This parameter has a strong influence regarding network performance. By default
@@ -237,4 +237,4 @@ fmin=0
 ################
 ###FMAX = defines the maximum frequency covered within the spectral network input representation. Every frequency above is ignored within the spectrogram.
 ################
-fmax=1000
+fmax=2000

@@ -442,31 +442,7 @@ is a placeholder for any kind of additional label information, e.g. target-alarm
 The underscore "_" works as separator between the components and should not be included except for separation purposes. 
 """
 class Dataset(AudioDataset):
-
-    """
-    Create variables in order to filter the filenames whether it is a target signal (call) or a noise signal (noise). Moreover
-    the entire spectral transform pipeline is created in oder to set up the data preprocessing for each audio file.
-    """
-    def __init__(
-        self,
-        file_names: Iterable[str],
-        working_dir=None,
-        cache_dir=None,
-        classes=None,
-        sr=44100,
-        n_fft=4096,
-        hop_length=441,
-        freq_compression="linear",
-        n_freq_bins=256,
-        f_min=0,
-        f_max=18000,
-        seq_len=128,
-        augmentation=False,
-        noise_files=[],
-        min_max_normalize=False,
-        *args,
-        **kwargs
-    ):
+    def __init__(self, file_names: Iterable[str], working_dir=None, cache_dir=None, classes=None, sr=44100, n_fft=4096, hop_length=441, freq_compression="linear", n_freq_bins=256, f_min=0, f_max=18000, seq_len=128, augmentation=False, noise_files=[], min_max_normalize=False, *args, **kwargs):
         super().__init__(file_names, working_dir, sr, *args, **kwargs)
         if self.dataset_name is not None:
             self._logger.info("Init dataset {}...".format(self.dataset_name))
@@ -480,40 +456,19 @@ class Dataset(AudioDataset):
         self.n_freq_bins = n_freq_bins
 
         valid_freq_compressions = ["linear", "mel", "mfcc"]
-
         if freq_compression not in valid_freq_compressions:
-            raise ValueError(
-                "{} is not a valid freq_compression. Must be one of {}",
-                format(freq_compression, valid_freq_compressions),
-            )
+            raise ValueError("{} is not a valid freq_compression. Must be one of {}", format(freq_compression, valid_freq_compressions))
         self.freq_compression = freq_compression
 
-
-        self._logger.debug(
-            "Number of files : {}".format(len(self.file_names))
-        )
-
-        self.class_dist_dict = dict()
-
-        if self.num_classes == 2:
-            for class_val in self.classes:
-                if class_val == "target":
-                    self.class_dist_dict[class_val] = 1
-                else:
-                    self.class_dist_dict[class_val] = 0
-        else:
-            for class_idx in range(len(self.classes)):
-                self.class_dist_dict[self.classes[class_idx]] = class_idx
+        self._logger.debug("Number of files : {}".format(len(self.file_names)))
+        self.class_dist_dict = {class_val: idx for idx, class_val in enumerate(classes)}
 
         calls = defaultdict(int)
-
         for f in self.file_names:
             calls[self.get_class_type(f)] += 1
 
         for c_t, n in calls.items():
-            self._logger.debug(
-                "Number of samples in " + self.dataset_name + " for {}: {}".format(self.get_class_type_from_idx(c_t), n)
-            )
+            self._logger.debug("Number of samples in " + self.dataset_name + " for {}: {}".format(self.get_class_type_from_idx(c_t), n))
 
         self.augmentation = augmentation
 
@@ -524,17 +479,7 @@ class Dataset(AudioDataset):
         ]
 
         self.file_reader = AsyncFileReader()
-
-        if cache_dir is None:
-            self.t_spectrogram = T.Compose(spec_transforms)
-        else:
-            self.t_spectrogram = T.CachedSpectrogram(
-                cache_dir=cache_dir,
-                spec_transform=T.Compose(spec_transforms),
-                n_fft=n_fft,
-                hop_length=hop_length,
-                file_reader=self.file_reader,
-            )
+        self.t_spectrogram = T.Compose(spec_transforms)
 
         if augmentation:
             self._logger.debug("Init augmentation transforms for time and pitch shift")
@@ -545,46 +490,81 @@ class Dataset(AudioDataset):
             self._logger.debug("Running without augmentation")
 
         if self.freq_compression == "linear":
-            self.t_compr_f = T.Interpolate(
-                n_freq_bins, sr, f_min, f_max
-            )
+            self.t_compr_f = T.Interpolate(n_freq_bins, sr, f_min, f_max)
         elif self.freq_compression == "mel":
             self.t_compr_f = T.F2M(sr=sr, n_mels=n_freq_bins, f_min=f_min, f_max=f_max)
         elif self.freq_compression == "mfcc":
-            self.t_compr_f = T.Compose(
-                T.F2M(sr=sr, n_mels=n_freq_bins, f_min=f_min, f_max=f_max)
-            )
+            self.t_compr_f = T.Compose(T.F2M(sr=sr, n_mels=n_freq_bins, f_min=f_min, f_max=f_max))
             self.t_compr_mfcc = T.M2MFCC(n_mfcc=32)
         else:
             raise "Undefined frequency compression"
 
-        if augmentation:
-            if noise_files:
-                self._logger.debug("Init augmentation transform for random noise addition")
-                self.t_addnoise = T.RandomAddNoise(
-                    noise_files,
-                    self.t_spectrogram,
-                    T.Compose(self.t_timestretch, self.t_pitchshift, self.t_compr_f),
-                    min_length=seq_len,
-                    return_original=True
-                )
-            else:
-                self.t_addnoise = None
-                self._logger.debug("No noise augmentation")
+        if augmentation and noise_files:
+            self._logger.debug("Init augmentation transform for random noise addition")
+            self.t_addnoise = T.RandomAddNoise(
+                noise_files,
+                self.t_spectrogram,
+                T.Compose(self.t_timestretch, self.t_pitchshift, self.t_compr_f),
+                min_length=seq_len,
+                return_original=True
+            )
+        else:
+            self.t_addnoise = None
+            self._logger.debug("No noise augmentation")
 
         self.t_compr_a = T.Amp2Db(min_level_db=DefaultSpecDatasetOps["min_level_db"])
-
         if min_max_normalize:
             self.t_norm = T.MinMaxNormalize()
             self._logger.debug("Init min-max-normalization activated")
         else:
-            self.t_norm = T.Normalize(
-                min_level_db=DefaultSpecDatasetOps["min_level_db"],
-                ref_level_db=DefaultSpecDatasetOps["ref_level_db"],
-            )
+            self.t_norm = T.Normalize(min_level_db=DefaultSpecDatasetOps["min_level_db"], ref_level_db=DefaultSpecDatasetOps["ref_level_db"])
             self._logger.debug("Init 0/1-dB-normalization activated")
 
         self.t_subseq = T.PaddedSubsequenceSampler(seq_len, dim=1, random=augmentation)
+
+    def __getitem__(self, idx):
+        file_name = self.file_names[idx]
+        file = os.path.join(self.working_dir, file_name) if self.working_dir is not None else file_name
+        sample = self.t_spectrogram(file)
+        if self.augmentation:
+            sample = self.t_amplitude(sample)
+            sample = self.t_pitchshift(sample)
+            sample = self.t_timestretch(sample)
+        sample = self.t_compr_f(sample)
+        ground_truth = None
+        if self.augmentation and self.t_addnoise is not None:
+            sample, ground_truth = self.t_addnoise(sample)
+            ground_truth = self.t_compr_a(ground_truth) if self.freq_compression != "mfcc" else self.t_compr_mfcc(ground_truth)
+            ground_truth = self.t_norm(ground_truth)
+        sample = self.t_compr_a(sample) if self.freq_compression != "mfcc" else self.t_compr_mfcc(sample)
+        sample = self.t_norm(sample)
+        if ground_truth is not None:
+            stacked = torch.cat((sample, ground_truth), dim=0)
+            stacked = self.t_subseq(stacked)
+            sample = stacked[0].unsqueeze(0)
+            ground_truth = stacked[1].unsqueeze(0)
+        else:
+            sample = self.t_subseq(sample)
+        label = self.load_label(file)
+        if ground_truth is not None:
+            label["ground_truth"] = ground_truth
+        return sample, label
+
+    def load_label(self, file_name: str):
+        label = dict()
+        label["file_name"] = file_name
+        label["call"] = self.get_class_type(file_name)
+        return label
+
+    def get_class_type_from_idx(self, idx):
+        for t, n in self.class_dist_dict.items():
+            if n == idx:
+                return t
+        raise ValueError("Unknown class type for idx ", idx)
+
+    def get_class_type(self, file_name):
+        class_name = file_name.split("\\")[-1].split("-", 1)[0] if platform.system() == "Windows" else file_name.split("/")[-1].split("-", 1)[0]
+        return self.class_dist_dict[class_name]
 
     """
     Computes per filename the entire data preprocessing pipeline containing all transformations and returns the

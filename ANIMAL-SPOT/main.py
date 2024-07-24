@@ -7,6 +7,8 @@ License: GNU General Public License v3.0
 Institution: Friedrich-Alexander-University Erlangen-Nuremberg, Department of Computer Science, Pattern Recognition Lab
 Last Access: 27.12.2022
 """
+import multiprocessing as mp
+mp.set_start_method('spawn', force=True)
 
 import os
 import json

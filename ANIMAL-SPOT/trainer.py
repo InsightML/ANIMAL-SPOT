@@ -155,9 +155,13 @@ class Trainer:
             else:
                 val_comp = operator.gt
             for epoch in range(start_epoch, n_epochs):
-                self.train_epoch(
-                    epoch, train_loader, loss_fn, optimizer, metrics, device
-                )
+                try:
+                    self.train_epoch(
+                        epoch, train_loader, loss_fn, optimizer, metrics, device
+                    )
+                except Exception as e:
+                    print("Error in training epoch")
+                    print(e)
                 if epoch % val_interval == 0 or epoch == n_epochs - 1:
                     val_loss = self.test_epoch(
                         epoch, val_loader, loss_fn, metrics, device, phase="val"
